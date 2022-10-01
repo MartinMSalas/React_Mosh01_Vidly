@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+table th
+{
+  
+  padding:0 150px 0 0; /* Only right padding*/
+}

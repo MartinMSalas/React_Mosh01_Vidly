@@ -1,13 +1,24 @@
-import { getMovies } from './services/fakeMovieService';
+import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const movies = getMovies();
-  
-//  const items = movies.map(movie => `<li>${movie}</li>`);
-  movies.map(movie => console.log(movie["title"]+movie["genre"]["name"]+movie["numberInStock"]+movie["dailyRentalRate"]));
   return (
-   <h1></h1>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React wiiiii
+        </a>
+      </header>
+    </div>
   );
 }
 
