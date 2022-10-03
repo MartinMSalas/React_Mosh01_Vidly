@@ -24,7 +24,40 @@ class Tabla extends Component {
         this.setState({listMovies: this.state.listMovies.filter(movie => movie !== movieToDelete.movie)} )
         console.log(this.state.listMovies.filter(movie => movie !== movieToDelete.movie));
     }
-    
+    generateTable = () =>{
+        if (this.state.listMovies.length){
+            return  (<table>
+                        <tr>
+                            <th>Title</th>
+                            <th>Genre</th>
+                            <th>Stock</th>
+                            <th>Rate</th>
+                            <th>Aca va un boton</th>
+                        </tr>
+                    
+                        {this.state.listMovies.map(movie =>
+                                            
+                                            
+                                                <tr> 
+                                
+                                                    <td>{movie["title"]}</td>
+                                                    <td>{movie["genre"]["name"]}</td>
+                                                    <td>{movie["numberInStock"]}</td>
+                                                    <td>{movie["dailyRentalRate"]} </td>
+                                                    <td>{<button onClick={() => this.handleDelete({movie})}>Eliminar </button>} </td>
+                                                </tr>
+                                                
+                                        
+                                    )
+                                            
+                        }
+                            
+                    </table>
+            )
+        }
+        return <h2> Insert movies in array</h2>
+
+    }
     render() {
         
         //{ this.state.tags.length === 0 && "Please create a new TAG!"}
@@ -35,33 +68,7 @@ class Tabla extends Component {
             <React.Fragment>
                 <h1>Hi</h1>
                 <hr />
-                <table>
-                    <tr>
-                        <th>Title</th>
-                        <th>Genre</th>
-                        <th>Stock</th>
-                        <th>Rate</th>
-                        <th>Aca va un boton</th>
-                    </tr>
-                   
-                    {this.state.listMovies.map(movie =>
-                                        
-                                        
-                                            <tr> 
-                            
-                                                <td>{movie["title"]}</td>
-                                                <td>{movie["genre"]["name"]}</td>
-                                                <td>{movie["numberInStock"]}</td>
-                                                <td>{movie["dailyRentalRate"]} </td>
-                                                <td>{<button onClick={() => this.handleDelete({movie})}>Eliminar </button>} </td>
-                                            </tr>
-                                            
-                                       
-                                )
-                                        
-                    }
-                        
-                </table>
+                {this.generateTable()}
                 
             </React.Fragment>
     );
