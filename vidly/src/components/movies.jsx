@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 
+
 /*
 install font awesome react https://fontawesome.com/v5/docs/web/use-with/react#get-started
 npm i --save @fortawesome/fontawesome-svg-core
@@ -12,12 +13,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 
-import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as emptyHeart } from '@fortawesome/free-regular-svg-icons';
+const fullHeart = <FontAwesomeIcon icon={faHeart} />;
+const emptyHeart = <FontAwesomeIcon icon={farHeart} />;
 */
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
+
+import Like from "./common/like";
+import Pagination from "./common/pagination";
 
 //import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 //import { faHeart as emptyHeart } from '@fortawesome/free-regular-svg-icons';
@@ -25,11 +26,30 @@ import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 class Movies extends Component {
   state = {
     movies: getMovies(),
+    pageSize: 4,  
   };
+  handleLike = (movie) => {
+    
+    const movies = this.state.movies;
+    const index = movies.indexOf(movie);
+  
+    movies[index].liked = !movies[index].liked;
+  
+    this.setState(movies);
+  };
+  
+  handleDelete = (movieToDel) => {
+    const movies = this.state.movies.filter((m) => m._id !== movieToDel._id);
+    this.setState({ movies });
+  };
+  handlePageChange = (page) => {
+    console.log(page);
+
+  }
   render() {
     const { length: count } = this.state.movies;
     if (!this.state.movies.length)
-    return <p>There are no movies in the database</p>;
+      return <p>There are no movies in the database</p>;
     return (
       <React.Fragment>
         <p>Showing {count} movies in the database.</p>
@@ -51,7 +71,9 @@ class Movies extends Component {
                 <td>{movie.genre.name}</td>
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate} </td>
-                <td onClick={()=> this.handleLikeClick(movie)}>{this.handleLike(movie)}</td>
+                <td>
+                  <Like onClick={() => this.handleLike(movie)} liked={movie.liked} ></Like>
+                </td>
                 <td>
                   <button
                     onClick={() => this.handleDelete(movie)}
@@ -64,35 +86,14 @@ class Movies extends Component {
             ))}
           </tbody>
         </table>
+        <Pagination itemsCount={count} pageSize={this.state.pageSize} onPageChange={this.handlePageChange} ></Pagination>
       </React.Fragment>
     );
   }
-  handleLikeClick = (movie) => {
-    
-    const movies = this.state.movies;
-    const index = movies.indexOf(movie);
+  /*
+  
+  */
 
-    movies[index].liked = !movies[index].liked;
-
-    this.setState(movies);
-    
-
-
-  }
-  handleLike = (movie) => {
-    
-    const fullHeart = <FontAwesomeIcon icon={faHeart} />;
-    const emptyHeart = <FontAwesomeIcon icon={farHeart} />;
-    if(movie.liked){
-      return fullHeart;
-    }else{
-      return emptyHeart;
-    }
-  }
-  handleDelete = (movieToDel) => {
-    const movies = this.state.movies.filter((m) => m._id !== movieToDel._id);
-    this.setState({ movies });
-  };
 }
 
 export default Movies;
