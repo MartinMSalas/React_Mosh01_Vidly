@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 
-
-/*
+/* 
 install font awesome react https://fontawesome.com/v5/docs/web/use-with/react#get-started
 npm i --save @fortawesome/fontawesome-svg-core
 npm install --save @fortawesome/free-solid-svg-icons
@@ -26,28 +25,31 @@ import Pagination from "./common/pagination";
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    pageSize: 4,  
+    pageSize: 4,
+    currentPage: 1,
   };
   handleLike = (movie) => {
-    
     const movies = this.state.movies;
     const index = movies.indexOf(movie);
-  
+
     movies[index].liked = !movies[index].liked;
-  
+
     this.setState(movies);
   };
-  
+
   handleDelete = (movieToDel) => {
     const movies = this.state.movies.filter((m) => m._id !== movieToDel._id);
     this.setState({ movies });
   };
   handlePageChange = (page) => {
     console.log(page);
+    
+    
+  };
 
-  }
   render() {
     const { length: count } = this.state.movies;
+    const { pageSize, currentPage} = this.state;
     if (!this.state.movies.length)
       return <p>There are no movies in the database</p>;
     return (
@@ -72,7 +74,10 @@ class Movies extends Component {
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate} </td>
                 <td>
-                  <Like onClick={() => this.handleLike(movie)} liked={movie.liked} ></Like>
+                  <Like
+                    onClick={() => this.handleLike(movie)}
+                    liked={movie.liked}
+                  ></Like>
                 </td>
                 <td>
                   <button
@@ -86,14 +91,18 @@ class Movies extends Component {
             ))}
           </tbody>
         </table>
-        <Pagination itemsCount={count} pageSize={this.state.pageSize} onPageChange={this.handlePageChange} ></Pagination>
+        <Pagination
+          itemsCount={count}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
+        ></Pagination>
       </React.Fragment>
     );
   }
   /*
   
   */
-
 }
 
 export default Movies;

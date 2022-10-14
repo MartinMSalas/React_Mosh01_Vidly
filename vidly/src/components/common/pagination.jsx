@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 
 const Pagination = (props) => {
-  const { itemsCount, pageSize } = props;
+  const { itemsCount, pageSize, currentPage, onPageChange } = props;
   let pagesCount = Math.ceil(itemsCount / pageSize);
   if (pagesCount === 1) return null;
 
@@ -16,12 +16,12 @@ const Pagination = (props) => {
       <ul className="pagination">
         {pages.map((page) => (
           <li key={page} className="page-item">
-            <a className="page-link" style={{ cursor: "pointer" }}>
+            <a className="page-link" onClick={() => onPageChange(page)} style={{ cursor: "pointer" }}>
               {page}
             </a>
           </li>
         ))}
-      </ul>
+      </ul>   
     </nav>
   );
 };
