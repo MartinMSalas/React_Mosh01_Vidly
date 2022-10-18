@@ -19,12 +19,11 @@ const ListGroup = (props) => {
         {genres.map( genre => (
           <li
             key={genre.name}
-            className={
-              genre.name === currentGenre ? "page-item active" : "page-item"
-            }
+            
           >
             <a
-              className="list-group-item"
+              className={genre.name === currentGenre ? "list-group-item active" : "list-group-item"}
+                
               onClick={() => onGenreChange(genre.name)}
               style={{ cursor: "pointer" }}
             >
