@@ -25,16 +25,21 @@ const emptyHeart = <FontAwesomeIcon icon={farHeart} />;
 import Like from "./common/like";
 import Pagination from "./common/pagination";
 
-
 import { paginate } from "../utils/paginate.js";
 
 import ListGroup from "./common/listGroup";
+import { getGenres } from "../services/fakeGenreService";
+
+
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    pageSize: 4,
+    genres: getGenres(),
+    pageSize: 2,
     currentPage: 1,
+    currentGenre: "Action",
   };
+  
   handleLike = (movie) => {
     const movies = this.state.movies;
     const index = movies.indexOf(movie);
@@ -51,20 +56,40 @@ class Movies extends Component {
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
-
+  handleGenreChange = (genre) => {
+    this.setState({ currentGenre: genre});
+    
+  };
   render() {
-    const { length: count } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies } = this.state;
-    if (!this.state.movies.length)
-      return <p>There are no movies in the database</p>;
+    //const { length: count } = this.state.movies ;
+    const { pageSize, currentPage, movies: allMovies, currentGenre, genres } = this.state;
+    let moviesByGenre = allMovies;
+    if(currentGenre !== "All" ){
+      moviesByGenre =  allMovies.filter((movie) =>{
 
-    const movies = paginate(allMovies, currentPage, pageSize);
-
+        return movie.genre.name === currentGenre;
+      }
+      
+      );
+    }
+    //__.filter(items, {genre: {name: genreRequest} });
+    //allMovies.map(movie => movie.genre.name === currentGenre);
+    //console.log("Peliculas por genero",moviesByGenre.length);
+    const count = moviesByGenre.length;
+    if (!count)
+    return <p>There are no movies in the database</p>;
+    
+    const movies = paginate(moviesByGenre, currentPage, pageSize);
+    
     return (
       <React.Fragment>
         <Row>
           <Col md="3">
-            <ListGroup></ListGroup>
+            <ListGroup
+              currentGenre={currentGenre}
+              onGenreChange={this.handleGenreChange}
+              genres = {genres}
+            ></ListGroup>
           </Col>
 
           <Col className="container">
