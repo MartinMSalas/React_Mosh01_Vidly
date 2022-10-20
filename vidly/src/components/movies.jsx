@@ -38,11 +38,11 @@ class Movies extends Component {
     genres: [],
     pageSize: 4,
     currentPage: 1,
-    sortColumn: { path: "title", order: "asc"},
+    sortColumn: { path: "title", order: "asc" },
   };
 
   componentDidMount() {
-    const genres = [{ _id:"", name: "All Genres" }, ...getGenres()];
+    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
     this.setState({ movies: getMovies(), genres });
   }
   handleLike = (movie) => {
@@ -58,24 +58,20 @@ class Movies extends Component {
     const movies = this.state.movies.filter((m) => m._id !== movieToDel._id);
     this.setState({ movies });
   };
-  
+
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
-  
+
   handleGenreSelect = (genre) => {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
 
-  handleSort = sortColumn => {
-    this.setState({sortColumn});
-
-
-    
+  handleSort = (sortColumn) => {
+    this.setState({ sortColumn });
   };
 
-  render() {
-    const { length: count } = this.state.movies;
+  getPagedData = () => {
     const {
       pageSize,
       currentPage,
@@ -83,33 +79,30 @@ class Movies extends Component {
       selectedGenre,
       sortColumn,
     } = this.state;
-    /*
-    Esto era la primera implementacion
-    
-    let moviesByGenre = allMovies;
-    if(currentGenre !== "All" ){
-      moviesByGenre =  allMovies.filter((movie) =>{
- 
-        return movie.genre.name === currentGenre;
-      }
-      
-      );
-    }
-    //__.filter(items, {genre: {name: genreRequest} });
-    //allMovies.map(movie => movie.genre.name === currentGenre);
-    //console.log("Peliculas por genero",moviesByGenre.length);
-    const count = moviesByGenre.length;
-    */
-    if (!count) return <p>There are no movies in the database</p>;
 
     const filtered =
       selectedGenre && selectedGenre._id
         ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
         : allMovies;
-        
-    const sorted= _.orderBy(filtered, [sortColumn.path], sortColumn.order);
-
+  
+    const sorted = _.orderBy(filtered, [sortColumn.path], sortColumn.order);
+  
     const movies = paginate(sorted, currentPage, pageSize);
+
+    return { totalCount: filtered.length, data: movies}
+  }
+
+  render() {
+    const { length: count } = this.state.movies;
+    const {
+      pageSize,
+      currentPage,
+      sortColumn,
+    } = this.state;
+    
+    if (!count) return <p>There are no movies in the database</p>;
+
+    const {totalCount, data: movies} = this.getPagedData();
 
     return (
       <React.Fragment>
@@ -118,12 +111,12 @@ class Movies extends Component {
             <ListGroup
               items={this.state.genres}
               onItemSelect={this.handleGenreSelect}
-              selectedItem={selectedGenre}
+              selectedItem={this.state.selectedGenre}
             ></ListGroup>
           </div>
 
           <div className="col">
-            <p>Showing {filtered.length} movies in the database.</p>
+            <p>Showing {totalCount} movies in the database.</p>
             <MoviesTable
               movies={movies}
               sortColumn={sortColumn}
@@ -132,7 +125,7 @@ class Movies extends Component {
               onSort={this.handleSort}
             ></MoviesTable>
             <Pagination
-              itemsCount={filtered.length}
+              itemsCount={totalCount}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}

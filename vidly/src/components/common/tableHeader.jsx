@@ -14,14 +14,14 @@ npm install --save @fortawesome/react-fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-
+<FontAwesomeIcon icon="fa-solid fa-sort-up" />
 const fullHeart = <FontAwesomeIcon icon={faHeart} />;
 const emptyHeart = <FontAwesomeIcon icon={farHeart} />;
 */
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
-import { faArrowDownZA } from "@fortawesome/free-solid-svg-icons";
+import { faSortUp } from "@fortawesome/free-solid-svg-icons";
+import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 
 class TableHeader extends Component {
   raiseSort = (path) => {
@@ -29,8 +29,11 @@ class TableHeader extends Component {
     if (sortColumn.path === path) {
       sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
     } else {
-      sortColumn.path = path;
-      sortColumn.order = "asc";
+      if (path !== undefined ) {
+
+        sortColumn.path = path;
+        sortColumn.order = "asc";
+      }
     }
     this.props.onSort(sortColumn);
   };
@@ -38,8 +41,8 @@ class TableHeader extends Component {
   renderSortIcon = (column) => {
     const { sortColumn } = this.props;
     if (column.path !== sortColumn.path) return null;
-    if (sortColumn.order === "asc") return <FontAwesomeIcon icon={faArrowDownAZ} />;
-    return <FontAwesomeIcon icon={faArrowDownZA} />
+    if (sortColumn.order === "asc") return <FontAwesomeIcon icon={faSortUp} />;
+    return <FontAwesomeIcon icon={faSortDown} />
   };
 
   render() {
@@ -47,7 +50,8 @@ class TableHeader extends Component {
       <thead>
         <tr>
           {this.props.columns.map((column) => (
-            <th
+            <th className="
+            clickable"
               key={column.path || column.key}
               onClick={() => this.raiseSort(column.path)}
             >

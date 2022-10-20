@@ -1,12 +1,13 @@
-import React, { Component } from "react";
+import React from 'react';
+
 // Input : Array of movies
 // Output : Array separated
 import _ from "lodash";
 import PropTypes from 'prop-types';
 
 
-const Pagination = (props) => {
-  const { itemsCount, pageSize, currentPage, onPageChange } = props;
+const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
+  
   
   let pagesCount = Math.ceil(itemsCount / pageSize);
   if (pagesCount === 1) return null;
